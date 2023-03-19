@@ -10,5 +10,8 @@
   },
   "posts/post-with-code/index.qmd": {
     "index.html": "b7390ccf"
+  },
+  "posts/python/index.qmd": {
+    "index.html": "06bdb4d0"
   }
 }
