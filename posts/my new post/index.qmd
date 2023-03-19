@@ -1,0 +1,46 @@
+---
+title: "Post With Code"
+author: "Harlow Malloc"
+date: "2022-10-15"
+categories: [news, code, analysis]
+image: "image.jpg"
+---
+
+This is a post with executable code.
+
+```{r}
+1 + 1
+```
+
+
+
+```{r}
+library(tidyverse)
+a = rnorm(1e5, 10, 2)
+grp = rep(c("A", "B"), each=1e5/2)
+df = data.frame(a=a,grp=grp)
+
+# df %>% count(grp)
+
+
+df %>% 
+  ggplot(aes(x=a)) +
+  geom_histogram() +
+  facet_grid(rows = vars(grp))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

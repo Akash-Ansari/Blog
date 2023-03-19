@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Akash Ansari">
+<meta name="dcterms.date" content="2022-10-15">
+
+<title>Akash Ansari - GLM Diagnostics in R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed slimcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Akash Ansari</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">About</a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"><i class="bi bi-twitter" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">GLM Diagnostics in R</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Akash Ansari </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 15, 2022</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#simulate-data" id="toc-simulate-data" class="nav-link" data-scroll-target="#simulate-data"> <span class="header-section-number">2</span> Simulate data</a></li>
+  <li><a href="#assumptions-of-glm" id="toc-assumptions-of-glm" class="nav-link" data-scroll-target="#assumptions-of-glm"> <span class="header-section-number">3</span> Assumptions of GLM</a></li>
+  <li><a href="#residuals" id="toc-residuals" class="nav-link" data-scroll-target="#residuals"> <span class="header-section-number">4</span> Residuals</a>
+  <ul class="collapse">
+  <li><a href="#response-residuals-rr" id="toc-response-residuals-rr" class="nav-link" data-scroll-target="#response-residuals-rr"> <span class="header-section-number">4.1</span> Response Residuals (Rr)</a></li>
+  <li><a href="#pearson-residuals-pr" id="toc-pearson-residuals-pr" class="nav-link" data-scroll-target="#pearson-residuals-pr"> <span class="header-section-number">4.2</span> Pearson Residuals (Pr)</a>
+  <ul class="collapse">
+  <li><a href="#standardized-pearson-residual-spr" id="toc-standardized-pearson-residual-spr" class="nav-link" data-scroll-target="#standardized-pearson-residual-spr"> <span class="header-section-number">4.2.1</span> Standardized Pearson Residual (spr):</a></li>
+  </ul></li>
+  <li><a href="#deviance-residuals-dr" id="toc-deviance-residuals-dr" class="nav-link" data-scroll-target="#deviance-residuals-dr"> <span class="header-section-number">4.3</span> Deviance Residuals (DR)</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+
+
+
+
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<p>In this post, we are going to discuss the diagnostic measures of Generalized Linear Model (GLM). We will start by stating the assumptions of GLM. Then, we are going to simulate fake data from binary logistic regression model. Then, we construct a wrong model by misspecifying certain parts of the model. We will use these models to show how various residual procedure are used to identify any model misfit. But, before that, different types of residuals will be discussed followed by leverages in GLM. Graphical plots will be used to check the model assumptions. A brief introduction of outliers and influential measures will be carried out before discussing the remedial measures.</p>
+</section>
+<section id="simulate-data" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Simulate data</h1>
+<p>Loading required packages-</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GLMsData)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="index1_cache/html/unnamed-chunk-3_515e84d10c195fb4ba26431d76c3a6fd">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">22</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>b0 <span class="ot">=</span> <span class="fl">1.5</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>b1 <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>b2 <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>b3 <span class="ot">=</span> <span class="fl">2.5</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>n<span class="ot">=</span><span class="dv">2000</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">=</span> <span class="fu">rnorm</span>(n, <span class="sc">-</span><span class="dv">2</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">=</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>x3 <span class="ot">=</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.4</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>z <span class="ot">=</span> b0 <span class="sc">+</span> b1<span class="sc">*</span>x1 <span class="sc">+</span> b2<span class="sc">*</span>x2<span class="sc">*</span>x2 <span class="sc">+</span> b3<span class="sc">*</span>x3</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>pr <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">+</span><span class="fu">exp</span>(<span class="sc">-</span>z))</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>,  pr)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>sim_data <span class="ot">=</span> <span class="fu">data.frame</span>(x1, x2, x3, y)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(n<span class="sc">*</span>pr, <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 1999.9980 1995.1963  787.8470 1088.7494 1726.4158 1955.5294 1213.3687
+ [8]  150.0487 1435.7881 1350.0661  425.5808  374.9952 1238.4609 1817.1878
+[15]  394.2398</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cbind(pr, n*pr)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Correct Model- <span class="math display">\[ Y = \beta_0 + \beta_1 x_1 +  \beta_2 x_2^2 + \beta_3 x_3 + \epsilon \]</span></p>
+<div class="cell" data-hash="index1_cache/html/unnamed-chunk-4_e945c58a4ed39c954e82296e82ac7bca">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">=</span> <span class="fu">glm</span>(y <span class="sc">~</span> x1 <span class="sc">+</span> <span class="fu">I</span>(x2<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> x3, <span class="at">family =</span> <span class="st">"binomial"</span>, <span class="at">data =</span> sim_data)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = y ~ x1 + I(x2^2) + x3, family = "binomial", data = sim_data)
+
+Deviance Residuals: 
+     Min        1Q    Median        3Q       Max  
+-3.05745  -0.48100   0.02173   0.45997   3.04796  
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)   1.7073     0.1861   9.174   &lt;2e-16 ***
+x1            2.0261     0.1077  18.808   &lt;2e-16 ***
+I(x2^2)       2.7699     0.1551  17.855   &lt;2e-16 ***
+x3            2.4809     0.1648  15.058   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 2735.5  on 1999  degrees of freedom
+Residual deviance: 1329.5  on 1996  degrees of freedom
+AIC: 1337.5
+
+Number of Fisher Scoring iterations: 7</code></pre>
+</div>
+</div>
+<hr>
+<p>Let’s make two wrong models.</p>
+<p>Wrong Model 1 (w1): Missing the quadratic term <span class="math display">\[ Y = \beta_0 + \beta_1 x_1 +  \beta_2 x_2 + \beta_3 x_3 + \epsilon \]</span></p>
+<div class="cell" data-hash="index1_cache/html/unnamed-chunk-5_20a3d685a0229659544e7b6aaa6947cb">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>w1 <span class="ot">=</span> <span class="fu">glm</span>(y <span class="sc">~</span> x1 <span class="sc">+</span> x2 <span class="sc">+</span> x3, <span class="at">family =</span> <span class="st">"binomial"</span>, <span class="at">data =</span> sim_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Wrong Model 2 (w2): Missing x3 <span class="math display">\[ Y = \beta_0 + \beta_1 x_1 +  \beta_2 x_2^2 +  \epsilon \]</span></p>
+<div class="cell" data-hash="index1_cache/html/unnamed-chunk-6_ebc4b1d93bc5c406c8aa2be91be98a4d">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>w2 <span class="ot">=</span> <span class="fu">glm</span>(y <span class="sc">~</span> x1 <span class="sc">+</span> <span class="fu">I</span>(x2<span class="sc">^</span><span class="dv">2</span>), <span class="at">family =</span> <span class="st">"binomial"</span>, <span class="at">data =</span> sim_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="assumptions-of-glm" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Assumptions of GLM</h1>
+<ol type="1">
+<li><p>The correct link function g()is used.</p></li>
+<li><p>All important explanatory variables are included, and each variable is included in the linear predictor on the correct scale.</p></li>
+<li><p>The responses y<sub>i</sub> assume to come from an exponential family (e.g.&nbsp;binomial, poisson, normal, gamma etc). They don’t need to come from normal distribution strictly.</p></li>
+<li><p>The responses Y<sub>1</sub>, Y<sub>2</sub>,…, Y<sub>n</sub> are independently distributed.</p></li>
+<li><p>Errors need to be independently distributed. But they don’t need to be normally distributed.</p></li>
+<li><p>A GLM does not assume linear relationship between explanatory variables and response variable, rather, it assumes linear rel’ between expected response or some function of expected response (as link function) and explanatory variables, i.e.&nbsp;<span class="math inline">\(\eta\)</span> = <span class="math inline">\(log \left( \frac{ \pi_i }{ 1- \pi_i} \right)\)</span> = logit(<span class="math inline">\(\pi_i\)</span>)</p></li>
+</ol>
+</section>
+<section id="residuals" class="level1 page-columns page-full" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Residuals</h1>
+<section id="response-residuals-rr" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="response-residuals-rr"><span class="header-section-number">4.1</span> Response Residuals (Rr)</h2>
+<p>Response Residual is the difference between the response y<sub>i</sub> and <span class="math inline">\(\mu_i\)</span>, i.e.&nbsp;Rr<sub>i</sub> = y<sub>i</sub> - <span class="math inline">\(\hat\mu_i\)</span>.</p>
+<div class="cell" data-hash="index1_cache/html/unnamed-chunk-8_f4b14210e3da9f4ca46fbfbbe584886d">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">predict</span>(m1, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(y<span class="sc">-</span>fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           1            2            3            4            5            6 
+2.722883e-06 2.131567e-03 5.630650e-01 4.550829e-01 1.419348e-01 2.209112e-02 </code></pre>
+</div>
+</div>
+<p>Alternative approach using the <code>residuals()</code> function.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">residuals</span>(m1, <span class="at">type =</span> <span class="st">"response"</span>) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>For linear model, Rr need to be normally distributed with mean 0 and constant variance. For GLM, it’s not necessarily true always.</p>
+<pre data-rcache="TRUE"><code>rr = residuals(m1, type = "response")
+qqnorm(rr)
+qqline(rr)</code></pre>
+<p>We need the Rr to behave like the Rr in linear model, so that we can evaluate our GLM model fit. But, the above qqnorm plot of the correct model tells us that the Rr in GLM are not following normal distribution. This type of residuals are not sufficient for assessing GLM model fit and hence a modification is required.</p>
+</section>
+<section id="pearson-residuals-pr" class="level2 page-columns page-full" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="pearson-residuals-pr"><span class="header-section-number">4.2</span> Pearson Residuals (Pr)</h2>
+<p>Pearson residuals (Pr) are defined as the difference between the observed and expected responses and divided by the square root of the estimated variance of <span class="math inline">\(y_i\)</span>. Mathematically, <span class="math display">\[ \Pr_i = \frac{(y_i-\hat\mu_i)} {\sqrt{\hat Var(\\y_i)}} \]</span> For logistic regression, <span class="math inline">\(\Pr_i = \frac{y_i - \hat p_i} {\sqrt{\hat p_i (1-\hat p_i)}}\)</span>.</p>
+<p>For poisson regression, <span class="math inline">\(\Pr_i = \frac{y_i - e^{x_i\hat \beta_i}} {\sqrt{e^{x_i\hat \beta_i}}}\)</span>.</p>
+
+<div class="no-row-height column-margin column-container"><div class="">
+<p>Note: <span class="math inline">\(\sum \Pr_i^2 = \frac{(y_i-\hat\mu_i)^2} {\hat Var(\\y_i)}.\)</span> When the GLM is the model corresponding to independence for cells in a two-way contingency table, this is the Pearson Chi-squared statistic <span class="math inline">\(\chi^2\)</span> for testing independence. <span class="citation" data-cites="generali">(<a href="#ref-generali" role="doc-biblioref"><span>“Generalized Linear Models,”</span> n.d.</a>)</span></p>
+</div></div><p>The following plot is showing that Pearson residuals deviate from normality when it comes from logistic regression model.</p>
+<div class="cell" data-hash="index1_cache/html/unnamed-chunk-9_97e88caddf761a06f48d852e5afcae7f">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pr <span class="ot">=</span> <span class="fu">residuals</span>(m1, <span class="at">type =</span> <span class="st">"pearson"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(pr)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(pr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index1_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="standardized-pearson-residual-spr" class="level3 page-columns page-full" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="standardized-pearson-residual-spr"><span class="header-section-number">4.2.1</span> Standardized Pearson Residual (spr):</h3>
+<p>The denominator of the pearson residual accounts for the variability in <span class="math inline">\(y_i\)</span>, but not for the variability for <span class="math inline">\(\hat \mu_i\)</span>. The spr solves this issue by dividing <span class="math inline">\((y_i - \hat \mu_i)\)</span> by its standard error, SE. Mathematically,</p>
+<p><span class="math display">\[
+spr = \frac{(y_i - \hat \mu_i)} {SE} = \frac{(y_i - \hat \mu_i)} {\sqrt{\hat Var(y_i)(1-h_i)}};   
+\]</span></p>
+<p>here <span class="math inline">\(h_i\)</span> represents leverage.</p>
+
+<div class="no-row-height column-margin column-container"><div class="">
+<div class="cell" data-hash="index1_cache/html/unnamed-chunk-10_075ae744193a15c38771c245223928bb">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>spr <span class="ot">=</span> <span class="fu">residuals</span>(m1, <span class="at">type =</span> <span class="st">"pearson"</span>)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">hatvalues</span>(m1))</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(spr)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(spr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index1_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div></div><p>If</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>qr<span class="ot">=</span>statmod<span class="sc">::</span><span class="fu">qresid</span>(m1)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(qr)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(qr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index1_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>qr<span class="ot">=</span>statmod<span class="sc">::</span><span class="fu">qresid</span>(w2)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(qr)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(qr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index1_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="deviance-residuals-dr" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="deviance-residuals-dr"><span class="header-section-number">4.3</span> Deviance Residuals (DR)</h2>
+<hr>
+
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-generali" class="csl-entry" role="doc-biblioentry">
+<span>“Generalized Linear Models.”</span> n.d. In, 65–98. John Wiley &amp; Sons, Inc. <a href="https://doi.org/10.1002/9780470114759.ch3">https://doi.org/10.1002/9780470114759.ch3</a>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

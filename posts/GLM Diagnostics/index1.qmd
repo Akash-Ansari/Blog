@@ -1,0 +1,212 @@
+---
+title: "GLM Diagnostics in R"
+author: "Akash Ansari"
+date: "2022-10-15"
+format: 
+  html:
+   toc: true
+   toc-location: left
+   number-sections: true
+categories: []
+image: "image.jpg"
+bibliography: references.bib
+---
+
+```{r, include=FALSE}
+options(tidyverse.quiet = TRUE)
+```
+
+# Introduction
+
+In this post, we are going to discuss the diagnostic measures of Generalized Linear Model (GLM). We will start by stating the assumptions of GLM. Then, we are going to simulate fake data from binary logistic regression model. Then, we construct a wrong model by misspecifying certain parts of the model. We will use these models to show how various residual procedure are used to identify any model misfit. But, before that, different types of residuals will be discussed followed by leverages in GLM. Graphical plots will be used to check the model assumptions. A brief introduction of outliers and influential measures will be carried out before discussing the remedial measures.
+
+# Simulate data
+
+Loading required packages-
+
+```{r, warning=FALSE, message=FALSE}
+library(GLMsData)
+library(tidyverse)
+```
+
+```{r cache=TRUE}
+set.seed(22)
+b0 = 1.5
+b1 = 2
+b2 = 3
+b3 = 2.5
+n=2000
+
+x1 = rnorm(n, -2)
+x2 = rnorm(n)
+x3 = rbinom(n, 1, 0.4)
+z = b0 + b1*x1 + b2*x2*x2 + b3*x3
+pr = 1/(1+exp(-z))
+y = rbinom(n, 1,  pr)
+sim_data = data.frame(x1, x2, x3, y)
+
+head(n*pr, 15)
+# cbind(pr, n*pr)
+```
+
+Correct Model- $$ Y = \beta_0 + \beta_1 x_1 +  \beta_2 x_2^2 + \beta_3 x_3 + \epsilon $$
+
+```{r, warning=FALSE, cache=TRUE}
+m1 = glm(y ~ x1 + I(x2^2) + x3, family = "binomial", data = sim_data)
+summary(m1)
+```
+
+------------------------------------------------------------------------
+
+Let's make two wrong models.
+
+Wrong Model 1 (w1): Missing the quadratic term $$ Y = \beta_0 + \beta_1 x_1 +  \beta_2 x_2 + \beta_3 x_3 + \epsilon $$
+
+```{r cache=TRUE}
+w1 = glm(y ~ x1 + x2 + x3, family = "binomial", data = sim_data)
+
+
+```
+
+Wrong Model 2 (w2): Missing x3 $$ Y = \beta_0 + \beta_1 x_1 +  \beta_2 x_2^2 +  \epsilon $$
+
+```{r cache=TRUE}
+w2 = glm(y ~ x1 + I(x2^2), family = "binomial", data = sim_data)
+
+```
+
+```{r, include=FALSE}
+# https://www.statology.org/glm-fit-fitted-probabilities-numerically-0-or-1-occurred/
+#use fitted model to predict response values
+# sim_data$y_pred = predict(m1, sim_data, type="response")
+# sim_data
+```
+
+# Assumptions of GLM
+
+1.  The correct link function g()is used.
+
+2.  All important explanatory variables are included, and each variable is included in the linear predictor on the correct scale.
+
+3.  The responses y~i~ assume to come from an exponential family (e.g. binomial, poisson, normal, gamma etc). They don't need to come from normal distribution strictly.
+
+4.  The responses Y~1~, Y~2~,..., Y~n~ are independently distributed.
+
+5.  Errors need to be independently distributed. But they don't need to be normally distributed.
+
+6.  A GLM does not assume linear relationship between explanatory variables and response variable, rather, it assumes linear rel' between expected response or some function of expected response (as link function) and explanatory variables, i.e. $\eta$ = $log \left( \frac{ \pi_i }{ 1- \pi_i} \right)$ = logit($\pi_i$)
+
+# Residuals
+
+## Response Residuals (Rr)
+
+Response Residual is the difference between the response y~i~ and $\mu_i$, i.e. Rr~i~ = y~i~ - $\hat\mu_i$.
+
+```{r cache=TRUE}
+fit = predict(m1, type = "response")
+head(y-fit)
+
+```
+
+Alternative approach using the `residuals()` function.
+
+``` r
+residuals(m1, type = "response") %>% head()
+```
+
+For linear model, Rr need to be normally distributed with mean 0 and constant variance. For GLM, it's not necessarily true always.
+
+```{rcache=TRUE}
+rr = residuals(m1, type = "response")
+qqnorm(rr)
+qqline(rr)
+```
+
+We need the Rr to behave like the Rr in linear model, so that we can evaluate our GLM model fit. But, the above qqnorm plot of the correct model tells us that the Rr in GLM are not following normal distribution. This type of residuals are not sufficient for assessing GLM model fit and hence a modification is required.
+
+## Pearson Residuals (Pr)
+
+Pearson residuals (Pr) are defined as the difference between the observed and expected responses and divided by the square root of the estimated variance of $y_i$. Mathematically, $$ \Pr_i = \frac{(y_i-\hat\mu_i)} {\sqrt{\hat Var(\\y_i)}} $$ For logistic regression, $\Pr_i = \frac{y_i - \hat p_i} {\sqrt{\hat p_i (1-\hat p_i)}}$.
+
+For poisson regression, $\Pr_i = \frac{y_i - e^{x_i\hat \beta_i}} {\sqrt{e^{x_i\hat \beta_i}}}$.
+
+
+
+::: column-margin
+Note: $\sum \Pr_i^2 = \frac{(y_i-\hat\mu_i)^2} {\hat Var(\\y_i)}.$ When the GLM is the model corresponding to independence for cells in a two-way contingency table, this is the Pearson Chi-squared statistic $\chi^2$ for testing independence. [@generali]
+:::
+
+The following plot is showing that Pearson residuals deviate from normality when it comes from logistic regression model.
+```{r cache=TRUE}
+pr = residuals(m1, type = "pearson")
+qqnorm(pr)
+qqline(pr)
+
+```
+
+
+### Standardized Pearson Residual (spr):
+The denominator of the pearson residual accounts for the variability in $y_i$, but not for the variability for $\hat \mu_i$. The spr solves this issue by dividing $(y_i - \hat \mu_i)$ by its standard error, SE. Mathematically,
+$$ 
+spr = \frac{(y_i - \hat \mu_i)} {SE} = \frac{(y_i - \hat \mu_i)} {\sqrt{\hat Var(y_i)(1-h_i)}};   
+$$
+here $h_i$ represents leverage.
+
+:::{.column-margin}
+```{r cache=TRUE}
+spr = residuals(m1, type = "pearson")/sqrt(1 - hatvalues(m1))
+qqnorm(spr)
+qqline(spr)
+
+```
+:::
+
+If 
+
+```{r}
+qr=statmod::qresid(m1)
+qqnorm(qr)
+qqline(qr)
+```
+```{r}
+qr=statmod::qresid(w2)
+qqnorm(qr)
+qqline(qr)
+```
+
+
+```{r, include=FALSE}
+# help
+# https://bookdown.org/ltupper/340f21_notes/deviance-and-residuals.html#pearson-residuals
+```
+
+## Deviance Residuals (DR)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+
+
+
+
+
+
+
+
