@@ -1,12 +1,66 @@
 ---
 title: "Akash Ansari"
-listing:
-  contents: posts
-  sort: "date desc"
-  type: default
-  categories: true
-  sort-ui: false
-  filter-ui: false
-page-layout: full
-title-block-banner: true
+image:  images/akash_ansari.jpg
+about: 
+  id: hero-heading
+  template: trestles
+  image-shape: round
+  image-width: 16em
+  links:
+    - icon: linkedin 
+      href: https://www.linkedin.com/in/akashansari/
+    - icon: github 
+      text: GitHub
+      href: https://github.com/Akash-Ansari
+    - icon: envelope 
+      text: Email
+      href: mailto:akash42du@gmail.com
 ---
+
+
+
+::: column-page
+Hi there, I am Akash (aka Yusuf) and glad you to host you on my website. I'm  currently working as a  Biostatistician (II) at the University of Mississippi Medical Center.
+
+At my work, I use applied statistical techniques such as generalized linear model (GLM), Survival analysis, Mixed effect model, 
+Joint model. I like to build shiny applications (e.g. dashboard).
+:::
+
+::: column-page
+![](images/deep_work.png)
+:::
+
+------------------------------------------------------------------------
+
+### Education
+
+**MS in Mathematics, 2019** \| University of Toledo, Ohio, USA
+
+**MS in Statistics, 2017** \| University of Dhaka, Bangladesh
+
+**BSc in Statistics, Biostatistics & Informatics, 2015** \| University of Dhaka, Bangladesh
+
+------------------------------------------------------------------------
+
+### Work Experience
+
+[**University of Mississippi Medical Center**]{.underline}
+
+-   Biostatistician II-Analytics (2022 - present)
+
+-   Biostatistician I (2019-2022)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
