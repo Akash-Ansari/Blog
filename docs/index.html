@@ -2,19 +2,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.36">
+<meta name="generator" content="quarto-1.1.251">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Akash Ansari</title>
+<title>Akash Ansari - Yusuf Ansari</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
 </style>
 
 
@@ -62,9 +67,11 @@ ul.task-list{list-style: none;}
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-sm navbar-dark ">
       <div class="navbar-container container-fluid">
-      <a class="navbar-brand" href="./index.html">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">Akash Ansari</span>
-  </a>
+    </a>
+  </div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
@@ -104,7 +111,7 @@ ul.task-list{list-style: none;}
   round " style="height: 16em; width: 16em;">
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Akash Ansari</h1>
+<h1 class="title">Yusuf Ansari</h1>
 </div>
 <div class="quarto-title-meta">
   </div>
@@ -122,11 +129,12 @@ ul.task-list{list-style: none;}
   </div>
   <div class="about-contents page-columns page-full"><main class="content page-columns page-full" id="quarto-document-content">
 <div class="column-page">
-<p>Hi there, I am Akash (aka Yusuf) and glad you to host you on my website. I’m currently working as a Biostatistician (II) at the University of Mississippi Medical Center.</p>
-<p>At my work, I use applied statistical techniques such as generalized linear model (GLM), Survival analysis, Mixed effect model, Joint model. I like to build shiny applications (e.g.&nbsp;dashboard).</p>
+<p>Hi there, I’m Yusuf Ansari.</p>
+<p>I am a biostatistician in the Department of Data Science at the University of Mississippi Medical Center (UMMC) and a PhD student (PT) with research interests in longitudinal data analysis, survival analysis, joint models, and statistical computing.</p>
+<p>My collaborative research has included work with the Department of Pediatrics at UMMC, the MIND Center at UMMC, and the Jackson Heart Study (JHS), spanning a variety of biomedical and clinical research questions.</p>
 </div>
 <div class="column-page">
-<p><img src="images/deep_work.png" class="img-fluid"></p>
+<!-- ![](images/deep_work.png) -->
 </div>
 <!-- ------------------------------------------------------------------------ -->
 <!-- ### Education -->
@@ -205,7 +213,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);

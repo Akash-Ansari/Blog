@@ -25,9 +25,9 @@ website:
     search: true
 format:
   html:
-    theme: 
-      - customized_styles.scss
-    mainfont: Montserrat
+    theme: Lux
+      # - customized_styles.scss
+    # mainfont: Montserrat
     toc: true
 
 editor: visual

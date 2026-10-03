@@ -7,11 +7,18 @@
     "text": "About this blog"
   },
   {
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "blog",
+    "section": "",
+    "text": "Akash Ansari\n\n\nOct 15, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAkash Ansari\n\n\nOct 15, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\nHarlow Malloc\n\n\nOct 15, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\nHarlow Malloc\n\n\nOct 15, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\nTristan O’Malley\n\n\nOct 12, 2022\n\n\n\n\n\n\n\n\nNo matching items"
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Akash Ansari",
+    "title": "Yusuf Ansari",
     "section": "",
-    "text": "Hi there, I am Akash (aka Yusuf) and glad you to host you on my website. I’m currently working as a Biostatistician (II) at the University of Mississippi Medical Center.\nAt my work, I use applied statistical techniques such as generalized linear model (GLM), Survival analysis, Mixed effect model, Joint model. I like to build shiny applications (e.g. dashboard)."
+    "text": "Hi there, I’m Yusuf Ansari.\nI am a biostatistician in the Department of Data Science at the University of Mississippi Medical Center (UMMC) and a PhD student (PT) with research interests in longitudinal data analysis, survival analysis, joint models, and statistical computing.\nMy collaborative research has included work with the Department of Pediatrics at UMMC, the MIND Center at UMMC, and the Jackson Heart Study (JHS), spanning a variety of biomedical and clinical research questions."
   },
   {
     "objectID": "posts/GLM Diagnostics/index.html",
@@ -42,27 +49,6 @@
     "text": "4.3 Deviance Residuals (DR)"
   },
   {
-    "objectID": "posts/my new post/index.html",
-    "href": "posts/my new post/index.html",
-    "title": "Post With Code",
-    "section": "",
-    "text": "1 + 1\n\n[1] 2\n\n\n\nlibrary(tidyverse)\n\n-- Attaching packages --------------------------------------- tidyverse 1.3.1 --\n\n\nv ggplot2 3.3.5     v purrr   0.3.4\nv tibble  3.1.3     v dplyr   1.0.7\nv tidyr   1.1.3     v stringr 1.4.0\nv readr   2.0.0     v forcats 0.5.1\n\n\n-- Conflicts ------------------------------------------ tidyverse_conflicts() --\nx dplyr::filter() masks stats::filter()\nx dplyr::lag()    masks stats::lag()\n\na = rnorm(1e5, 10, 2)\ngrp = rep(c(\"A\", \"B\"), each=1e5/2)\ndf = data.frame(a=a,grp=grp)\n\n# df %>% count(grp)\n\n\ndf %>% \n  ggplot(aes(x=a)) +\n  geom_histogram() +\n  facet_grid(rows = vars(grp))\n\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`."
-  },
-  {
-    "objectID": "posts/post-with-code/index.html",
-    "href": "posts/post-with-code/index.html",
-    "title": "Post With Code",
-    "section": "",
-    "text": "1 + 1\n\n[1] 2"
-  },
-  {
-    "objectID": "posts/welcome/index.html",
-    "href": "posts/welcome/index.html",
-    "title": "Welcome To My Blog",
-    "section": "",
-    "text": "Since this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
-  },
-  {
     "objectID": "posts/GLM Diagnostics/index1.html",
     "href": "posts/GLM Diagnostics/index1.html",
     "title": "GLM Diagnostics in R",
@@ -91,10 +77,24 @@
     "text": "4.3 Deviance Residuals (DR)"
   },
   {
-    "objectID": "blog.html",
-    "href": "blog.html",
-    "title": "blog",
+    "objectID": "posts/my new post/index.html",
+    "href": "posts/my new post/index.html",
+    "title": "Post With Code",
     "section": "",
-    "text": "Akash Ansari\n\n\nOct 15, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAkash Ansari\n\n\nOct 15, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\nHarlow Malloc\n\n\nOct 15, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\nHarlow Malloc\n\n\nOct 15, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\nTristan O’Malley\n\n\nOct 12, 2022\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "1 + 1\n\n[1] 2\n\n\n\nlibrary(tidyverse)\n\n-- Attaching packages --------------------------------------- tidyverse 1.3.1 --\n\n\nv ggplot2 3.3.5     v purrr   0.3.4\nv tibble  3.1.3     v dplyr   1.0.7\nv tidyr   1.1.3     v stringr 1.4.0\nv readr   2.0.0     v forcats 0.5.1\n\n\n-- Conflicts ------------------------------------------ tidyverse_conflicts() --\nx dplyr::filter() masks stats::filter()\nx dplyr::lag()    masks stats::lag()\n\na = rnorm(1e5, 10, 2)\ngrp = rep(c(\"A\", \"B\"), each=1e5/2)\ndf = data.frame(a=a,grp=grp)\n\n# df %>% count(grp)\n\n\ndf %>% \n  ggplot(aes(x=a)) +\n  geom_histogram() +\n  facet_grid(rows = vars(grp))\n\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`."
+  },
+  {
+    "objectID": "posts/post-with-code/index.html",
+    "href": "posts/post-with-code/index.html",
+    "title": "Post With Code",
+    "section": "",
+    "text": "1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "posts/welcome/index.html",
+    "href": "posts/welcome/index.html",
+    "title": "Welcome To My Blog",
+    "section": "",
+    "text": "Since this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
   }
 ]

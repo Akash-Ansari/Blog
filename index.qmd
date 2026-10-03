@@ -1,5 +1,5 @@
 ---
-title: "Akash Ansari"
+title: "Yusuf Ansari"
 image:  images/akash_ansari.jpg
 about: 
   id: hero-heading
@@ -18,13 +18,15 @@ about:
 ---
 
 ::: column-page
-Hi there, I am Akash (aka Yusuf) and glad you to host you on my website. I'm currently working as a Biostatistician (II) at the University of Mississippi Medical Center.
+Hi there, I’m Yusuf Ansari.
 
-At my work, I use applied statistical techniques such as generalized linear model (GLM), Survival analysis, Mixed effect model, Joint model. I like to build shiny applications (e.g. dashboard).
+I am a biostatistician in the Department of Data Science at the University of Mississippi Medical Center (UMMC) and a PhD student (PT) with research interests in longitudinal data analysis, survival analysis, joint models, and statistical computing.
+
+My collaborative research has included work with the Department of Pediatrics at UMMC, the MIND Center at UMMC, and the Jackson Heart Study (JHS), spanning a variety of biomedical and clinical research questions.
 :::
 
 ::: column-page
-![](images/deep_work.png)
+<!-- ![](images/deep_work.png) -->
 :::
 
 <!-- ------------------------------------------------------------------------ -->
