@@ -5,6 +5,7 @@ listing:
   sort: "date desc"
   contents: posts
   categories: true
+  max-description-length: 60
   grid-item-border: true 
   date-format: medium
 ---

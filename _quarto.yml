@@ -3,14 +3,14 @@ project:
   output-dir: docs
 
 website:
-  title: "Akash Ansari"
+  title: "Yusuf Ansari"
   page-footer:
     left: 
       - icon: github
         href: https://github.com/Akash-Ansari
       - icon: linkedin
         href: https://www.linkedin.com/in/akashansari/
-    right: "Copyright 2023, Akash Ansari"
+    right: "Copyright 2023, Yusuf Ansari"
     border: false
     background: light
   navbar:
@@ -19,8 +19,8 @@ website:
       - blog.qmd
       - icon: github
         href: https://github.com/Akash-Ansari
-      - icon: twitter
-        href: https://twitter.com/Akash_Ansari1
+      # - icon: twitter
+      #   href: https://twitter.com/Akash_Ansari1
     collapse-below: sm
     search: true
 format:
@@ -30,5 +30,5 @@ format:
     # mainfont: Montserrat
     toc: true
 
-editor: visual
+editor: source
 

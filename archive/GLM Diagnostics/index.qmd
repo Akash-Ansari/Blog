@@ -1,5 +1,6 @@
 ---
 title: "GLM Diagnostics in R"
+description: "A practical introduction to diagnostic methods for generalized linear models."
 author: "Akash Ansari"
 date: "2022-10-15"
 format: 
@@ -102,7 +103,7 @@ w2 = glm(y ~ x1 + I(x2^2), family = "binomial", data = sim_data)
 
 Response Residual is the difference between the response y~i~ and $\mu_i$, i.e. Rr~i~ = y~i~ - $\hat\mu_i$.
 
-```{r cache=TRUE}
+```{r}
 fit = predict(m1, type = "response")
 head(y-fit)
 
@@ -116,7 +117,7 @@ residuals(m1, type = "response") %>% head()
 
 For linear model, Rr need to be normally distributed with mean 0 and constant variance. For GLM, it's not necessarily true always.
 
-```{rcache=TRUE}
+```{r}
 rr = residuals(m1, type = "response")
 qqnorm(rr)
 qqline(rr)
@@ -130,50 +131,33 @@ Pearson residuals (Pr) are defined as the difference between the observed and ex
 
 For poisson regression, $\Pr_i = \frac{y_i - e^{x_i\hat \beta_i}} {\sqrt{e^{x_i\hat \beta_i}}}$.
 
-
-
 ::: column-margin
 Note: $\sum \Pr_i^2 = \frac{(y_i-\hat\mu_i)^2} {\hat Var(\\y_i)}.$ When the GLM is the model corresponding to independence for cells in a two-way contingency table, this is the Pearson Chi-squared statistic $\chi^2$ for testing independence. [@generali]
 :::
 
 The following plot is showing that Pearson residuals deviate from normality when it comes from logistic regression model.
-```{r cache=TRUE}
+
+```{r}
 pr = residuals(m1, type = "pearson")
 qqnorm(pr)
 qqline(pr)
-
+# plot(m1)
 ```
 
-
 ### Standardized Pearson Residual (spr):
-The denominator of the pearson residual accounts for the variability in $y_i$, but not for the variability for $\hat \mu_i$. The spr solves this issue by dividing $(y_i - \hat \mu_i)$ by its standard error, SE. Mathematically,
-$$ 
-spr = \frac{(y_i - \hat \mu_i)} {SE} = \frac{(y_i - \hat \mu_i)} {\sqrt{\hat Var(y_i)(1-h_i)}};   
-$$
-here $h_i$ represents leverage.
 
-:::{.column-margin}
-```{r cache=TRUE}
-spr = residuals(m1, type = "pearson")/sqrt(1 - hatvalues(m1))
-qqnorm(spr)
-qqline(spr)
+The denominator of the pearson residual accounts for the variability in $y_i$, but not for the variability for $\hat \mu_i$. The spr solves this issue by dividing $(y_i - \hat \mu_i)$ by its standard error, SE. Mathematically, $$ 
+spr = \frac{(y_i - \hat \mu_i)} {SE} = \frac{(y_i - \hat \mu_i)} {\sqrt{\hat Var(y_i)(1-h_i)}};   
+$$ here $h_i$ represents leverage.
+
+::: column-margin
+```{r}
+pr1 = residuals(m1, type = "pearson")/sqrt(1 - hatvalues(m1))
+qqnorm(pr1)
+qqline(pr1)
 
 ```
 :::
-
-If 
-
-```{r}
-qr=statmod::qresid(m1)
-qqnorm(qr)
-qqline(qr)
-```
-```{r}
-qr=statmod::qresid(w2)
-qqnorm(qr)
-qqline(qr)
-```
-
 
 ```{r, include=FALSE}
 # help
@@ -182,31 +166,4 @@ qqline(qr)
 
 ## Deviance Residuals (DR)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-
-
-
-
-
-
-
-
-
+------------------------------------------------------------------------
